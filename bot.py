@@ -31,10 +31,9 @@ async def final_results(ctx):
 @bot.command(name='start')
 async def start(ctx, n_large: int, length: int):
     global data, scores, task
-    if task != None:
+    if (task is not None):
         task[0].cancel()
         await task[1]
-    task = None
     try:
         data = generate(n_large)
     except Exception as e:
@@ -44,6 +43,10 @@ async def start(ctx, n_large: int, length: int):
     task = asyncio.create_task(asyncio.sleep(length)), final_results(ctx)
     await task[0]
     await task[1]
+    async def set_task_none():
+        global task
+        task = None
+    await set_task_none()
 
 @bot.command(name='ans')
 async def ans(ctx, exp: str):
